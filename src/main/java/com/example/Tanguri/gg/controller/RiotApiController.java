@@ -1,6 +1,7 @@
 package com.example.Tanguri.gg.controller;
 
 import com.example.Tanguri.gg.domain.dto.AccountDto;
+import com.example.Tanguri.gg.domain.dto.SummonerDto;
 import com.example.Tanguri.gg.service.RiotApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,5 +16,9 @@ public class RiotApiController {
     @GetMapping("/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}")
     public AccountDto getAccountByRiotId(@PathVariable String gameName, @PathVariable String tagLine) {
         return riotApiService.getAccountByRiotId(gameName, tagLine);
+    }
+    @GetMapping("/lol/summoner/v4/summoners/by-puuid/{encryptedPUUID}")
+    public SummonerDto getSummonerByPUUID(@PathVariable String encryptedPUUID) {
+        return riotApiService.getSummonerByPUUID(encryptedPUUID);
     }
 }
