@@ -1,13 +1,16 @@
 package com.example.Tanguri.gg.controller;
 
 import com.example.Tanguri.gg.domain.dto.AccountDto;
+import com.example.Tanguri.gg.domain.dto.MatchDTO;
 import com.example.Tanguri.gg.domain.dto.SummonerDto;
 import com.example.Tanguri.gg.service.RiotApiService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -28,7 +31,7 @@ public class RiotApiController {
         return riotApiService.getMatchIdsByPUUID(puuid);
     }
     @GetMapping("/lol/match/v5/matches/{matchId}")
-    public Object getMatchById(@PathVariable String matchId) {
+    public Object getMatchById(@PathVariable String matchId) throws IOException {
         return riotApiService.getMatchById(matchId);
     }
 }

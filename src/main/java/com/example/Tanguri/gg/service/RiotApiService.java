@@ -1,7 +1,13 @@
 package com.example.Tanguri.gg.service;
 
 import com.example.Tanguri.gg.domain.dto.AccountDto;
+import com.example.Tanguri.gg.domain.dto.MatchDTO;
 import com.example.Tanguri.gg.domain.dto.SummonerDto;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -10,8 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.net.http.HttpHeaders;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RiotApiService {
@@ -19,6 +27,7 @@ public class RiotApiService {
     private String apiKey;
 
     private final RestTemplate restTemplate = new RestTemplate();
+    private final ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
 
     public AccountDto getAccountByRiotId(String gameName, String tagLine) {
         String url = "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/"
@@ -45,16 +54,26 @@ public class RiotApiService {
 
         return response.getBody();
     }
-    public Object getMatchById(String matchId) {
+    public Object getMatchById(String matchId) throws IOException {
         String url = "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchId + "?api_key=" + apiKey;
 
-        ResponseEntity<Object> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null, // No additional headers needed
-                Object.class
-        );
+//        Object forObject = restTemplate.getForObject(url, Object.class);
 
-        return response.getBody();
+
+        // Make the API call
+        Object response = restTemplate.getForObject(url, Object.class);
+
+        // Convert the response to a Map
+        Map<String, Object> responseMap = objectMapper.convertValue(response, Map.class);
+        System.out.println("responseMap = " + responseMap);
+
+        // Convert the Map to a JSON string
+        String jsonString = objectMapper.writeValueAsString(responseMap);
+        System.out.println("jsonString = " + jsonString);
+
+        // Convert the JSON string to MatchDTO
+        MatchDTO matchDTO = objectMapper.readValue(jsonString, MatchDTO.class);
+        System.out.println("matchDTO = " + matchDTO.getMetadata());
+        return matchDTO;
     }
 }
