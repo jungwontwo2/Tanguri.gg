@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class RiotApiController {
@@ -20,5 +22,13 @@ public class RiotApiController {
     @GetMapping("/lol/summoner/v4/summoners/by-puuid/{encryptedPUUID}")
     public SummonerDto getSummonerByPUUID(@PathVariable String encryptedPUUID) {
         return riotApiService.getSummonerByPUUID(encryptedPUUID);
+    }
+    @GetMapping("/lol/match/v5/matches/by-puuid/{puuid}/ids")
+    public List<String> getMatchIdsByPUUID(@PathVariable String puuid) {
+        return riotApiService.getMatchIdsByPUUID(puuid);
+    }
+    @GetMapping("/lol/match/v5/matches/{matchId}")
+    public Object getMatchById(@PathVariable String matchId) {
+        return riotApiService.getMatchById(matchId);
     }
 }

@@ -3,10 +3,15 @@ package com.example.Tanguri.gg.service;
 import com.example.Tanguri.gg.domain.dto.AccountDto;
 import com.example.Tanguri.gg.domain.dto.SummonerDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.http.HttpHeaders;
+import java.util.List;
 
 @Service
 public class RiotApiService {
@@ -26,5 +31,30 @@ public class RiotApiService {
                 "?api_key=" + apiKey;
         System.out.println("url = " + url);
         return restTemplate.getForObject(url, SummonerDto.class);
+    }
+
+    public List<String> getMatchIdsByPUUID(String puuid) {
+        String url = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?api_key="+apiKey;
+
+        ResponseEntity<List<String>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null, // HttpHeaders 대신 null 사용
+                new ParameterizedTypeReference<List<String>>() {}
+        );
+
+        return response.getBody();
+    }
+    public Object getMatchById(String matchId) {
+        String url = "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchId + "?api_key=" + apiKey;
+
+        ResponseEntity<Object> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null, // No additional headers needed
+                Object.class
+        );
+
+        return response.getBody();
     }
 }
