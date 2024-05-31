@@ -40,13 +40,17 @@ public class MatchDTO {
         // Getters and Setters
         @Data
         public static class Participant {
-            private int allInPings;
-            private int assistMePings;
+            private String summonerName;
+            private String championName;
+            private int summoner1Id;
+            private int summoner2Id;
+            private int kills;
             private int assists;
-            private int baronKills;
-            private int basicPings;
-
-            // Getters and Setters
+            private int deaths;
+            private int visionScore;
+            private int visionWardsBoughtInGame;
+            private int wardsPlaced;
+            private boolean win;
         }
     }
 }

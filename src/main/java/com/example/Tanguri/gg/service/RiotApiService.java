@@ -65,15 +65,14 @@ public class RiotApiService {
 
         // Convert the response to a Map
         Map<String, Object> responseMap = objectMapper.convertValue(response, Map.class);
-        System.out.println("responseMap = " + responseMap);
 
         // Convert the Map to a JSON string
         String jsonString = objectMapper.writeValueAsString(responseMap);
-        System.out.println("jsonString = " + jsonString);
 
         // Convert the JSON string to MatchDTO
         MatchDTO matchDTO = objectMapper.readValue(jsonString, MatchDTO.class);
-        System.out.println("matchDTO = " + matchDTO.getMetadata());
+        List<String> participants = matchDTO.getMetadata().getParticipants();
+
         return matchDTO;
     }
 }
