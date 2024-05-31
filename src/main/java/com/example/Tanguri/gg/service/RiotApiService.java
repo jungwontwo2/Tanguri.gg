@@ -32,6 +32,7 @@ public class RiotApiService {
     public AccountDto getAccountByRiotId(String gameName, String tagLine) {
         String url = "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/"
                 + gameName + "/" + tagLine + "?api_key=" + apiKey;
+        System.out.println("url = " + url);
         return restTemplate.getForObject(url, AccountDto.class);
     }
 
